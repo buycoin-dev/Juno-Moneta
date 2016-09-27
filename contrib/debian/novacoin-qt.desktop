@@ -1,0 +1,13 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=Moneta
+Comment=Moneta P2P Cryptocurrency
+Comment[ru]=Moneta, P2P криптовалюта
+Comment[fr]=Moneta, monnaie virtuelle cryptographique pair à pair
+Comment[tr]=Moneta, eşten eşe kriptografik sanal para birimi
+Exec=/usr/bin/Moneta-qt
+Terminal=false
+Type=Application
+Icon=/usr/share/pixmaps/Moneta80.xpm
+MimeType=x-scheme-handler/Moneta;
+Categories=Office;

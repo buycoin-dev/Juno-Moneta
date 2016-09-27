@@ -1,0 +1,5 @@
+Moneta-qt usr/bin
+share/pixmaps/Moneta32.xpm usr/share/pixmaps
+share/pixmaps/Moneta80.xpm usr/share/pixmaps
+debian/Moneta-qt.desktop usr/share/applications
+debian/Moneta-qt.protocol usr/share/kde4/services/

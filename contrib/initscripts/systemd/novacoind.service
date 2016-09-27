@@ -1,0 +1,11 @@
+[Unit]
+Description=Moneta daemon serivce
+After=network.target
+
+[Service]
+Type=simple
+User=Moneta
+ExecStart=/opt/Moneta/Monetad
+
+[Install]
+WantedBy=multi-user.target

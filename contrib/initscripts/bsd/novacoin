@@ -1,0 +1,68 @@
+#!/bin/sh
+
+# PROVIDE: Moneta
+# REQUIRE: LOGIN
+# KEYWORD: shutdown
+
+#
+# Add the following lines to /etc/rc.conf.local or /etc/rc.conf
+# to enable this service:
+#
+# Moneta_enable (bool): Set to NO by default. Set this variable to YES if you want to enable Moneta service.
+# Moneta_config (path): Set to /usr/local/etc/Moneta.conf by default.
+# Moneta_user:  The user account Moneta daemon runs as. It uses 'root' user by default.
+# Moneta_group: The group account Moneta daemon runs as. It uses 'wheel' group by default.
+# Moneta_datadir (str): Default to "/var/db/Moneta". Base data directory.
+
+. /etc/rc.subr
+
+name=Moneta
+rcvar=Moneta_enable
+
+: ${Moneta_enable:=NO}
+: ${Moneta_config=/usr/local/etc/Moneta.conf}
+: ${Moneta_datadir=/var/db/Moneta}
+: ${Moneta_user="root"}
+: ${Moneta_group="wheel"}
+
+required_files=${Moneta_config}
+command=/usr/local/bin/Monetad
+Moneta_chdir=${Moneta_datadir}
+pidfile="${Moneta_datadir}/Monetad.pid"
+stop_cmd=Moneta_stop
+command_args="-conf=${Moneta_config} -datadir=${Moneta_datadir} -daemon -pid=${pidfile}"
+start_precmd="${name}_prestart"
+
+Moneta_create_datadir()
+{
+	echo "Creating data directory"
+	eval mkdir -p ${Moneta_datadir}
+	[ $? -eq 0 ] && chown -R ${Moneta_user}:${Moneta_group} ${Moneta_datadir}
+}
+
+Moneta_prestart()
+{
+	if [ ! -d "${Moneta_datadir}/." ]; then
+		Moneta_create_datadir || return 1
+	fi
+}
+
+Moneta_requirepidfile()
+{
+	if [ ! "0`check_pidfile ${pidfile} ${command}`" -gt 1 ]; then
+		echo "${name} not running? (check $pidfile)."
+		exit 1
+	fi
+}
+
+Moneta_stop()
+{
+    Moneta_requirepidfile
+
+	echo "Stopping ${name}."
+	eval ${command} -conf=${Moneta_config} -datadir=${Moneta_datadir} stop
+	wait_for_pids ${rc_pid}
+}
+
+load_rc_config $name
+run_rc_command "$1"

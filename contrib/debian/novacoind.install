@@ -1,0 +1,2 @@
+debian/bin/Monetad usr/bin
+src/Monetad usr/lib/Moneta
